@@ -26,7 +26,7 @@ export default function Home() {
     if (!location.trim()) return;
     setLoading(true);
     setError(null);
-    setWeather(null); // clear old weather to trigger entrance animations again
+    setWeather(null); 
     try {
       const res = await fetch(`/api/weather?location=${encodeURIComponent(location)}`);
       if (!res.ok) {
@@ -46,7 +46,6 @@ export default function Home() {
     if (weather) {
       setRecommendation(getRecommendation(weather, situation));
       
-      // Smooth scroll on mobile if the result is loaded
       if (window.innerWidth < 1024 && resultRef.current) {
         setTimeout(() => {
           resultRef.current?.scrollIntoView({ behavior: 'smooth', block: 'start' });
@@ -56,14 +55,14 @@ export default function Home() {
   }, [weather, situation]);
 
   return (
-    <main className="min-h-screen bg-[var(--background)] py-8 px-4 sm:px-6 lg:px-8 max-w-7xl mx-auto">
+    <main className="min-h-screen bg-[var(--background)] py-8 px-4 sm:px-6 lg:px-8 max-w-5xl mx-auto">
       <Header />
       
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-12 mt-8">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 mt-6">
         
         {/* LEFT COLUMN: Controls */}
-        <div className="lg:col-span-5 space-y-8 animate-fade-in delay-100">
-          <div className="bg-white/40 backdrop-blur-md border border-slate-200/60 p-6 sm:p-8 rounded-[2rem] shadow-sm">
+        <div className="lg:col-span-5 space-y-6 animate-fade-in">
+          <div className="bg-white/80 backdrop-blur-md border border-slate-200 p-5 sm:p-6 rounded-2xl shadow-sm">
             <SituationSelector 
               selected={situation} 
               onSelect={setSituation} 
@@ -78,26 +77,25 @@ export default function Home() {
         </div>
 
         {/* RIGHT COLUMN: Results */}
-        <div className="lg:col-span-7" ref={resultRef}>
+        <div className="lg:col-span-7 animate-fade-in" ref={resultRef}>
           {loading && (
-            <div className="h-full min-h-[400px] flex flex-col items-center justify-center p-8">
-              <div className="relative w-16 h-16 flex items-center justify-center mb-6">
-                <div className="absolute inset-0 border-4 border-blue-100 rounded-full"></div>
-                <div className="absolute inset-0 border-4 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
+            <div className="h-full min-h-[300px] flex flex-col items-center justify-center p-6 bg-white/50 border border-slate-200/50 rounded-xl">
+              <div className="relative w-10 h-10 flex items-center justify-center mb-4">
+                <div className="absolute inset-0 border-2 border-blue-100 rounded-full"></div>
+                <div className="absolute inset-0 border-2 border-blue-600 rounded-full border-t-transparent animate-spin"></div>
               </div>
-              <p className="text-lg font-bold text-slate-800">Checking the weather...</p>
-              <p className="text-slate-500">Finding the perfect recommendation for you.</p>
+              <p className="text-sm font-semibold text-slate-800">Checking weather...</p>
             </div>
           )}
 
           {error && (
-            <div className="h-full min-h-[400px] flex flex-col items-center justify-center text-center p-8 bg-rose-50/50 border border-rose-100 rounded-3xl animate-fade-in">
-              <AlertTriangle className="text-rose-500 mb-4" size={48} />
-              <h3 className="text-xl font-bold text-slate-800 mb-2">Weather unavailable</h3>
-              <p className="text-slate-600 mb-6 max-w-sm">{error}</p>
+            <div className="h-full min-h-[300px] flex flex-col items-center justify-center text-center p-6 bg-rose-50 border border-rose-100 rounded-xl">
+              <AlertTriangle className="text-rose-500 mb-3" size={32} />
+              <h3 className="text-lg font-semibold text-slate-800 mb-1">Weather unavailable</h3>
+              <p className="text-sm text-slate-600 mb-4">{error}</p>
               <button
                 onClick={fetchWeather}
-                className="px-6 py-3 bg-white border border-slate-200 shadow-sm rounded-xl font-semibold text-slate-700 hover:bg-slate-50 hover:shadow transition-all"
+                className="px-4 py-2 bg-white border border-slate-200 shadow-sm rounded-xl text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors"
               >
                 Try Again
               </button>
@@ -105,28 +103,20 @@ export default function Home() {
           )}
 
           {!loading && !error && !weather && (
-            <div className="animate-fade-in delay-200 h-full">
-              <EmptyState />
-            </div>
+             <EmptyState />
           )}
 
           {!loading && !error && weather && recommendation && (
-            <div className="space-y-6">
-              <div className="animate-fade-up delay-0">
-                <WeatherBanner weather={weather} />
-              </div>
+            <div className="space-y-4">
+              <WeatherBanner weather={weather} />
               
-              <div className="animate-fade-up delay-100">
-                <RecommendationCards 
-                  wear={recommendation.wear} 
-                  carry={recommendation.carry} 
-                  avoid={recommendation.avoid} 
-                />
-              </div>
+              <RecommendationCards 
+                wear={recommendation.wear} 
+                carry={recommendation.carry} 
+                avoid={recommendation.avoid} 
+              />
 
-              <div className="animate-fade-up delay-300">
-                <WhySection reasons={recommendation.reasons} />
-              </div>
+              <WhySection reasons={recommendation.reasons} />
             </div>
           )}
         </div>
