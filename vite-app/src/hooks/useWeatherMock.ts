@@ -1,4 +1,4 @@
-import { WeatherCondition } from '../components/WeatherScene';
+import type { WeatherCondition } from '../types/weather';
 import { getRecommendation, FitPreference, GenderPreference } from '../data/recommendations';
 
 export interface WeatherData {

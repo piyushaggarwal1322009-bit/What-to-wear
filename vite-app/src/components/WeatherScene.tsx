@@ -1,5 +1,5 @@
 import React from 'react';
-import { WeatherCondition } from '../hooks/useWeatherMock';
+import type { WeatherCondition } from '../types/weather';
 
 export function WeatherScene({ condition }: { condition: WeatherCondition }) {
   return (
