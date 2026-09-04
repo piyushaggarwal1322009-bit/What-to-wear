@@ -1,4 +1,4 @@
-# 👕 What Should I Wear?
+# 👕 What Should I Wear
 
 A practical, context-aware weather recommendation website that tells you what to wear based on the weather and what you are doing.
 
